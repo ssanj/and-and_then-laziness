@@ -14,6 +14,14 @@ fn main() {
     first_and_then_second().unwrap();
     println!("----------------");
     define_then_call_with_and_then().unwrap();
+    println!();
+    println!();
+    println!("----- failure and ------");
+    let result1 = first_failure_and_second();
+    println!("{:?}", result1);
+    println!("----- failure and_then ------");
+    let result2 = first_failure_and_then_second();
+    println!("{:?}", result2)
 }
 
 
@@ -21,6 +29,16 @@ fn first_and_second() -> R {
   println!("first_and_second");
   println!("calling first `and` second");
   first().and(second())
+}
+
+fn first_failure_and_second() -> R {
+  println!("first_fail_and_second");
+  first_fail().and(second())
+}
+
+fn first_failure_and_then_second() -> R {
+  println!("first_fail_and_then_second");
+  first_fail().and_then(|_|second())
 }
 
 fn first_and_then_second() -> R {
@@ -51,8 +69,8 @@ fn define_then_call_with_and_then() -> R {
 }
 
 fn first() -> R {
-  println!("First: Sleeping for 10 seconds");
-  thread::sleep(Duration::from_secs(10));
+  println!("First: Sleeping for 2 seconds");
+  thread::sleep(Duration::from_secs(2));
   println!("First complete");
   Ok(())
 }
@@ -61,4 +79,8 @@ fn first() -> R {
 fn second() -> R {
   println!("Second complete");
   Ok(())
+}
+
+fn first_fail() -> R {
+  Err("first failed".to_owned())
 }
